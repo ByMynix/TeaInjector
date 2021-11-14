@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "TeaInjector"
-#define MyAppVersion "1.1"
+#define MyAppVersion "1.2"
 #define MyAppPublisher "ByMynix.xyz"
 #define MyAppURL "https://teainjector.bymynix.xyz/"
 #define MyAppExeName "TeaInjector.exe"

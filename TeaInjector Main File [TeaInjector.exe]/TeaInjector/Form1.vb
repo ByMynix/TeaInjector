@@ -47,8 +47,15 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If File.Exists("C:\TeaInjector\Settings.txt") Then
+            MetroToggle2.Checked = False
+        Else
+            Process.Start("http://discord.bymynix.xyz/")
+            Process.Start("https://bit.ly/bymynixdevelopments")
+            Process.Start("https://bit.ly/github-teainjector-bymynix")
+        End If
         Dim client As WebClient = New WebClient()
-        If MetroTextBox1.Text = client.DownloadString("https://teainjector.bymynix.xyz/Update%20Checker%201.1.txt") Then
+        If MetroTextBox1.Text = client.DownloadString("https://teainjector.bymynix.xyz/Update%20Checker%201.2.txt") Then
 
         Else
             Timer1.Interval = 3 * 1000
@@ -110,5 +117,14 @@ Public Class Form1
 
     Private Sub PictureBox5_Click(sender As Object, e As EventArgs) Handles PictureBox5.Click
         Process.Start("https://corsair.wtf/")
+    End Sub
+
+    Private Sub MetroToggle2_CheckedChanged(sender As Object, e As EventArgs) Handles MetroToggle2.Click
+        If MetroToggle2.Checked = False Then
+            System.IO.File.Create("C:\TeaInjector\Settings.txt").Close()
+        End If
+        If MetroToggle2.Checked = True And File.Exists("C:\TeaInjector\Settings.txt") Then
+            System.IO.File.Delete("C:\TeaInjector\Settings.txt")
+        End If
     End Sub
 End Class
