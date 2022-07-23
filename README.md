@@ -5,7 +5,6 @@
 <a href="https://dsc.gg/bymynixde"><img alt="ByMynixDE Discord Server" src="https://img.shields.io/discord/908055039258550305?label=Discord&logo=Discord"></a> 
 <a href="https://github.com/ByMynix/TeaInjector/commits/master"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/w/ByMynix/TeaInjector"></a>
 <img alt="Platform Windows" src="https://img.shields.io/badge/platform-Windows-0078d7.svg?style=plastic"></a>
-<img alt="Game CS:GO" src="https://img.shields.io/badge/game-CS%3AGO-yellow.svg?style=plastic"></a>
 <a href="https://www.paypal.com/paypalme/bymynix"><img alt="PayPal" src="https://img.shields.io/badge/donate-PayPal-104098.svg?style=plastic&logo=PayPal"></a>
 
 
