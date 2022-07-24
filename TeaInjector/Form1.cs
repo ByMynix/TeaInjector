@@ -9,6 +9,7 @@ using ReaLTaiizor.Enum.Poison;
 using ReaLTaiizor.Forms;
 using ReaLTaiizor.Controls;
 using Microsoft.Win32;
+using System.Threading.Tasks;
 
 namespace TeaInjector
 {
@@ -31,7 +32,7 @@ namespace TeaInjector
             }
 
             var client = new WebClient();
-            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.3.txt"))
+            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.4.txt"))
             {
                 poisonLabel4.Text = "No Updates available! You are currently using the latest version of TeaInjector";
             }
@@ -203,7 +204,7 @@ namespace TeaInjector
             return dllPath;
         }
 
-        private void poisonButton1_Click(object sender, EventArgs e)
+        private async void poisonButton1_Click(object sender, EventArgs e)
         {
             foreach (var process in Process.GetProcessesByName("hl2"))
             {
@@ -222,16 +223,23 @@ namespace TeaInjector
                 process.Kill();
             }
 
-            System.IO.File.WriteAllBytes(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll", Properties.Resources.VAC_ByPass);
+            try
+            {
+                System.IO.File.WriteAllBytes(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll", Properties.Resources.VAC_ByPass);
+            }
+            catch
+            {
+                
+            }
 
             string strSteamInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Valve\Steam", "InstallPath", null);
             var proc = Process.Start(strSteamInstallPath + @"\Steam.exe");
 
-                while (string.IsNullOrEmpty(proc.MainWindowTitle))
-            {       
+            while (string.IsNullOrEmpty(proc.MainWindowTitle))
+            {
                 proc.Refresh();
             }
-            
+
             try
             {
                 if (VACByPassLoader.Run(GetPathVACDLL()))
@@ -240,14 +248,16 @@ namespace TeaInjector
                     poisonLabel3.ForeColor = Color.Lime;
                     poisonLabel3.Text = "VAC-ByPass-Status:  Active";
                     poisonButton1.Enabled = false;
-                    System.Threading.Thread SteamExit = new System.Threading.Thread(WaitingforSteamExit);
-                    SteamExit.Start();
-                    while (SteamExit.IsAlive)
-                        Application.DoEvents();
-                    poisonLabel4.Text = "VAC-ByPass is now inactive";
-                    poisonLabel3.ForeColor = Color.Red;
-                    poisonLabel3.Text = "VAC-ByPass-Status:  Inactive";
-                    poisonButton1.Enabled = true;
+                    await Task.Run(() => {
+                        foreach (var process in Process.GetProcessesByName("Steam"))
+                        {
+                            process.WaitForExit();
+                        }
+                        poisonLabel4.Text = "VAC-ByPass is now inactive";
+                        poisonLabel3.ForeColor = Color.Red;
+                        poisonLabel3.Text = "VAC-ByPass-Status:  Inactive";
+                        poisonButton1.Enabled = true;
+                    });
                 }
                 else
                 {
@@ -265,15 +275,6 @@ namespace TeaInjector
             string dllPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\ServiceHub2.TaskRun.Microsoft.dll";
 
             return dllPath;
-        }
-        private void WaitingforSteamExit()
-        {
-            Process T = new Process();
-            {
-                var withBlock = T;
-                foreach (Process p1 in Process.GetProcessesByName("Steam"))
-                    p1.WaitForExit();
-            }
         }
     }
 }
