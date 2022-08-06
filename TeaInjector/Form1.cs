@@ -26,13 +26,17 @@ namespace TeaInjector
         private void Form1_Load(object sender, EventArgs e)
         {
             if (System.IO.File.Exists(AppPath + @"\Updater.exe"))
-                System.IO.File.Delete(AppPath + @"\Updater.exe");
-            else
             {
+                foreach (var process in Process.GetProcessesByName("Updater"))
+                {
+                    process.Kill();
+                    process.WaitForExit();
+                }
+                System.IO.File.Delete(AppPath + @"\Updater.exe");
             }
 
             var client = new WebClient();
-            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.4.txt"))
+            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.5.txt"))
             {
                 poisonLabel4.Text = "No Updates available! You are currently using the latest version of TeaInjector";
             }
@@ -206,6 +210,8 @@ namespace TeaInjector
 
         private async void poisonButton1_Click(object sender, EventArgs e)
         {
+            poisonButton1.Enabled = false;
+
             foreach (var process in Process.GetProcessesByName("hl2"))
             {
                 process.Kill();
@@ -223,22 +229,28 @@ namespace TeaInjector
                 process.Kill();
             }
 
-            try
-            {
-                System.IO.File.WriteAllBytes(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll", Properties.Resources.VAC_ByPass);
-            }
-            catch
-            {
-                
-            }
+            await Task.Run(() => {
+                if (System.IO.File.Exists(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll"))
+                {
+                    while (IsFileLocked(new FileInfo(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll")))
+                    {
+                        System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                    }
+                }
+            });
+
+            System.IO.File.WriteAllBytes(AppPath + @"\ServiceHub2.TaskRun.Microsoft.dll", Properties.Resources.VAC_ByPass);
 
             string strSteamInstallPath = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Valve\Steam", "InstallPath", null);
             var proc = Process.Start(strSteamInstallPath + @"\Steam.exe");
 
-            while (string.IsNullOrEmpty(proc.MainWindowTitle))
+            await Task.Run(() => {
+                poisonLabel4.Text = "Starting VAC-ByPass...";
+                while (string.IsNullOrEmpty(proc.MainWindowTitle))
             {
                 proc.Refresh();
             }
+            });
 
             try
             {
@@ -247,7 +259,6 @@ namespace TeaInjector
                     poisonLabel4.Text = "VAC-ByPass is now active";
                     poisonLabel3.ForeColor = Color.Lime;
                     poisonLabel3.Text = "VAC-ByPass-Status:  Active";
-                    poisonButton1.Enabled = false;
                     await Task.Run(() => {
                         foreach (var process in Process.GetProcessesByName("Steam"))
                         {
@@ -262,11 +273,15 @@ namespace TeaInjector
                 else
                 {
                     PoisonMessageBox.Show(this, "Failed!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    poisonButton1.Enabled = true;
+                    poisonLabel4.Text = "Failed!";
                 }
             }
             catch (Exception ex)
             {
                 PoisonMessageBox.Show(this, ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                poisonButton1.Enabled = true;
+                poisonLabel4.Text = "Failed!";
             }
         }
 
@@ -275,6 +290,26 @@ namespace TeaInjector
             string dllPath = System.AppDomain.CurrentDomain.BaseDirectory + @"\ServiceHub2.TaskRun.Microsoft.dll";
 
             return dllPath;
+        }
+
+        public static bool IsFileLocked(FileInfo file)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = file.Open(FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return true;
+            }
+            finally
+            {
+                if (stream != null)
+                    stream.Close();
+            }
+            return false;
         }
     }
 }

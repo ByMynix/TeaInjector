@@ -263,8 +263,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Updater.exe" />
     <None Include="Resources\VAC-ByPass.dll" />
+    <None Include="Resources\Updater.exe" />
     <Content Include="TF2Tea.ico" />
   </ItemGroup>
   <ItemGroup>
