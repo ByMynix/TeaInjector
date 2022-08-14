@@ -17,8 +17,11 @@ TeaInjector is an injector for Team Fortress 2. It's an open-source project sinc
 
 
 
-# Compile
-In this project "TeaInjector" resources were embedded:
+# Information
+To be able to use the injector to its full extent, the latest C++ redistributales (vc_redist x86) are required: [[Click here]](https://docs.microsoft.com/cpp/windows/latest-supported-vc-redist?view=msvc-170)                                                                                       
+(also required for all TF2 cheats written in C++)
+
+<ins>In this project "TeaInjector" resources were embedded:</ins>
 
 The resource "Updater", a winforms application as auto-updater ([Branch-Auto-Updater](https://github.com/ByMynix/TeaInjector/tree/TeaInjector-Auto-Updater)), which takes care of automatic updates.
 
@@ -27,15 +30,11 @@ The resource "VAC-ByPass", i.e. the VAC-ByPass file ([Branch-VAC-ByPass](https:/
 These two resources, which are already embedded in "TeaInjector" can of course be replaced by compiling the two applications mentioned and then embedding them as resources.
 
 
+
+# Compile with Visual Studio
 [Compile it in "Release / x86"]
 
 [Compiled application to use is in "\bin\x86\Release"]
-
-
-
-
-
-
 
 
 
