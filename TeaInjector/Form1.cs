@@ -36,7 +36,7 @@ namespace TeaInjector
             }
 
             var client = new WebClient();
-            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.6.txt"))
+            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.7.txt"))
             {
                 poisonLabel4.Text = "No Updates available! You are currently using the latest version of TeaInjector";
             }
@@ -63,7 +63,7 @@ namespace TeaInjector
                 poisonToggle2.Checked = false;
             else
             {
-                Process.Start("http://dsc.gg/bymynixde");
+                Process.Start("https://bymynix.de/discord/");
                 Process.Start("https://bymynix.de/projects/");
                 Process.Start("https://github.com/ByMynix/TeaInjector");
             }
@@ -99,7 +99,7 @@ namespace TeaInjector
 
         private void PictureBox2_Click(object sender, EventArgs e)
         {
-            Process.Start("http://dsc.gg/bymynixde");
+            Process.Start("https://bymynix.de/discord/");
         }
 
         private void poisonLinkLabel1_Click(object sender, EventArgs e)
