@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using Ionic.Zip;
 
 namespace TeaInjector_Auto_Update
 {
@@ -24,7 +25,8 @@ namespace TeaInjector_Auto_Update
         private async void poisonButton_Click(object sender, EventArgs e)
         {
             poisonButton.Enabled = false;
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 poisonLabel.Text = "[^]-Closing TeaInjector...";
                 foreach (var process in Process.GetProcessesByName("TeaInjector"))
                 {
@@ -47,12 +49,12 @@ namespace TeaInjector_Auto_Update
 
             poisonLabel.Text = "[^]-Downloading new version...";
             var webclient = new WebClient();
-            var uri = new Uri("https://bymynix.de/teainjector/TeaInjector.exe");
+            var uri = new Uri("https://bymynix.de/teainjector/TeaInjector.zip");
 
             webclient.DownloadFileCompleted += webclient_DownloadDataCompleted;
             webclient.DownloadProgressChanged += DownloadProgressChanged;
 
-            webclient.DownloadFileAsync(uri, AppPath + @"\TeaInjector.exe");
+            webclient.DownloadFileAsync(uri, AppPath + @"\TeaInjector.zip");
         }
 
         private void DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
@@ -63,8 +65,29 @@ namespace TeaInjector_Auto_Update
         private void webclient_DownloadDataCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             PoisonMessageBox.Show(this, "Update successfully downloaded. TeaInjector starts automatically after clicking 'Ok'.", "TeaInjector: Auto-Updater", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            string zipFilePath = "TeaInjector.zip";
+            string password = "123";
+            string extractPath = AppPath;
+
+            ExtractZIP(zipFilePath, extractPath, password);
+
+            File.Delete(AppPath + "TeaInjector.zip");
+
             Process.Start(AppPath + @"\TeaInjector.exe");
             Application.Exit();
+        }
+
+        static void ExtractZIP(string zipFilePath, string extractPath, string password)
+        {
+            using (ZipFile zipFile = ZipFile.Read(zipFilePath))
+            {
+                zipFile.Password = password;
+
+                foreach (ZipEntry entry in zipFile)
+                {
+                    entry.Extract(extractPath, ExtractExistingFileAction.OverwriteSilently);
+                }
+            }
         }
     }
 }
