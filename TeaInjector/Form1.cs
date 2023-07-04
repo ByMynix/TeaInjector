@@ -36,7 +36,7 @@ namespace TeaInjector
             }
 
             var client = new WebClient();
-            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.8.txt"))
+            if ("No Updates available!" == client.DownloadString("https://bymynix.de/teainjector/Update%20Checker%201.9.txt"))
             {
                 poisonLabel4.Text = "No Updates available! You are currently using the latest version of TeaInjector";
             }
