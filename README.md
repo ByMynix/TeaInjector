@@ -9,12 +9,12 @@
 
 
 
-<img alt="TeaInjector-Picture" src="https://bymynix.de/teainjector/assets/images/teainjector-picture-570x280.png" />
+<img alt="TeaInjector-Picture" src="https://bymynix.de/projects/teainjector-picture-570x280.png" />
  
-[https://bymynix.de/teainjector/]
+[~~https://bymynix.de/teainjector/~~]
 TeaInjector is an injector for Team Fortress 2. It's an open-source project since 11.09.2021 and no longer closed-source. From the 23.07.2022 it's a real Git project, as the previous versions consisted of a file structure and I was too lazy to make the effort.
 
-
+## This project is no longer actively maintained. I want to express my sincere gratitude for all the feedback and support received throughout its lifetime. The project achieved a remarkable total of ```29894``` downloads. Thank you for being part of this journey!
 
 
 # Information
